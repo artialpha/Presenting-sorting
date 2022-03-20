@@ -6,7 +6,7 @@ pygame.init()
 class Draw:
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
-    FONT = pygame.font.SysFont("Times New Roman", 40)
+    FONT = pygame.font.SysFont("Times New Roman", 30)
 
     def __init__(self, width, height, lst):
         self.width = width
@@ -32,7 +32,7 @@ class Draw:
         self.window.fill(self.WHITE)
 
     def prepare_list_display(self):
-        x = (self.width - self.space_for_number + self.padding) / 2
+        x = (self.width - self.size_of_number) / 2
         y = self.height / 4
 
         length_lst_half = int(len(self.lst) / 2)
