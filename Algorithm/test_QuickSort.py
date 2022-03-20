@@ -3,7 +3,8 @@ import numpy as np
 from unittest import TestCase
 from QuickSort import QuickSort
 
-data_test = [random.sample(range(100), 100) for y in range(20)]
+
+data_test = [random.sample(range(100), 10) for y in range(20)]
 
 
 class TestQuickSortPartition(TestCase):
