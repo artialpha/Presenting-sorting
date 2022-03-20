@@ -1,24 +1,21 @@
-from unittest import TestCase
-
+import random
 import numpy as np
-
+from unittest import TestCase
 from QuickSort import QuickSort
+
+data_test = [random.sample(range(100), 100) for y in range(20)]
 
 
 class TestQuickSortPartition(TestCase):
-    data_test = [
-        [np.array([10, 2, 5, 1, 9, 4, 7, 3, 8, 6]), np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])],
-        [np.array([4, 1, 2, 10, 8, 3, 5, 6, 9, 7]), np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])]
-    ]
 
     def test_partition(self):
-        for unsorted, after_sort in self.data_test:
+        for unsorted in data_test:
             pivot_index = len(unsorted) - 1
 
             print(pivot_index, 'pivot index')
             print(unsorted[pivot_index], 'pivot value')
             print(unsorted, '\n')
-            pivot_index = QuickSort.partition(0, len(unsorted) - 1, pivot_index, unsorted)
+            pivot_index = QuickSort.partition(0, len(unsorted) - 1, unsorted)
             print(pivot_index, 'pivot index')
             print(unsorted[pivot_index], 'pivot value')
             print(unsorted, '\n')
@@ -33,15 +30,12 @@ class TestQuickSortPartition(TestCase):
 
 
 class TestQuickSortSortData(TestCase):
-    data_test = [
-        #[[10, 2, 5, 1, 9, 4, 7, 3, 8, 6], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]],
-        [[4, 1, 2, 10, 8, 3, 5, 6, 9, 7], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
-    ]
 
     def test_sort_data(self):
-        for unsorted, after_sort in self.data_test:
+        for unsorted in data_test:
             pivot_index = len(unsorted) - 1
             print(unsorted, "before quick")
-            QuickSort.sort_data(0, len(unsorted) - 1, pivot_index, unsorted)
+            QuickSort.sort_data(0, len(unsorted) - 1, unsorted)
             print(unsorted, "after quick")
             print("RUNDA NASTEPNA")
+            self.assertTrue(all(unsorted[i] <= unsorted[i+1] for i in range(len(unsorted) - 1)))
