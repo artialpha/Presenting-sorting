@@ -4,9 +4,10 @@ import random
 
 class QuickSort(Sort):
 
-    def __init__(self, data):
+    def __init__(self, data, draw):
         super().__init__(data)
         self.pivot_index = len(data) - 1
+        self.draw = draw
 
     @classmethod
     def sort_data(cls, left_index, right_index, data):
@@ -15,7 +16,7 @@ class QuickSort(Sort):
 
         if left_index < right_index:
             pivot = cls.partition(left_index, right_index, data)
-
+            # here i draw li, ri, pivot, edges
             cls.sort_data(left_index, pivot-1, data)
             cls.sort_data(pivot+1, right_index, data)
 

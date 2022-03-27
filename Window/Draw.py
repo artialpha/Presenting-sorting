@@ -1,46 +1,54 @@
-import math
 import pygame
-pygame.init()
+import random
+from Window.ListToDraw import ListToDraw
+from Window.Button import Button
+from Window.Letter import Letter
+from Window.Edge import Edge
 
 
 class Draw:
     WHITE = (255, 255, 255)
-    BLACK = (0, 0, 0)
-    FONT = pygame.font.SysFont("Times New Roman", 30)
 
-    def __init__(self, width, height, lst):
+    def __init__(self, width, height, fps, velocity):
         self.width = width
         self.height = height
-        self.lst = lst
+        self.fps = fps
+        self.velocity = velocity
+
         self.window = None
-        self.list_display = None
-
-        number_of_digits = int(math.log10(max(lst)))+1
-        size_of_digit = self.FONT.size(str(number_of_digits))[0]
-
-        self.size_of_number = size_of_digit*number_of_digits
-        self.padding = 20
-        print(self.size_of_number, 'self.size_of_number')
-        self.space_for_number = self.size_of_number + self.padding
-        print(self.space_for_number, 'self.space_for_number')
-
         self.draw_window()
-        self.prepare_list_display()
+
+        lst = random.sample(range(9, 100), 8)
+        self.list_to_display = ListToDraw(lst, self.window, self.width/2, self.height/4)
+
+        # Buttons
+        self.padding_button = 10
+        self.button_next = Button(width=80, height=50, x=self.width/2 + self.padding_button, y=self.height*(3/4),
+                                  text="next", window=self.window)
+        self.button_prev = Button(width=80, height=50, x=self.width/2-80 - self.padding_button, y=self.height*(3/4),
+                                  text="prev", window=self.window)
+
+        # letter
+        x, y = self.list_to_display[0][1]
+        self.letter = Letter(self.window, x, y, 'b')
+
+        #edge
+        self.edge = Edge(self.window, x, y, 2)
 
     def draw_window(self):
         self.window = pygame.display.set_mode((self.width, self.height))
         self.window.fill(self.WHITE)
 
-    def prepare_list_display(self):
-        x = (self.width - self.size_of_number) / 2
-        y = self.height / 4
+    def redraw_window(self):
+        self.list_to_display.display_list()
+        self.button_next.draw_button()
+        self.button_prev.draw_button()
+        self.letter.draw_letter()
+        self.edge.draw_edge(-20)
 
-        length_lst_half = int(len(self.lst) / 2)
 
-        #print(self.lst, x, y)
-        #print(self.FONT.size('5'))
-        list_cords = [(x + element*self.space_for_number, y) for element in range(-length_lst_half, length_lst_half+1)]
-        self.list_display = list(zip(self.lst, list_cords))
+
+
 
     '''
             display_list
@@ -50,10 +58,14 @@ class Draw:
             it returns a tuple (width, height)
             https://www.pygame.org/docs/ref/font.html#pygame.font.Font.size
     '''
-    def display_list(self):
-        for number, cords in self.list_display:
-            number_display = self.FONT.render(str(number), True, self.BLACK)
-            self.window.blit(number_display, cords)
 
-    def swap(self):
-        pass
+    def move(self, dt, fps, velocity):
+        distance = self.size_of_digit_y
+        for x in range(int(fps/velocity)):
+            #print(round(dt, 2), fps, self.size_of_digit_y*round(dt, 2)*velocity, fps/velocity)
+            self.list_display[0][1][1] += distance*round(dt, 2)*velocity
+            self.redraw_window()
+            pygame.display.update()
+        self.list_display[0][1][1] = round(self.list_display[0][1][1], 2)
+
+
