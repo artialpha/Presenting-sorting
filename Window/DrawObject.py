@@ -13,3 +13,6 @@ class DrawObject:
         self.width = width
         self.height = height
         self.window = window
+
+    def draw(self):
+        pass

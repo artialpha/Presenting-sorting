@@ -7,5 +7,5 @@ class Letter(DrawObject):
         super().__init__(window, x, y)
         self.letter = self.FONT.render(letter, True, self.BLACK)
 
-    def draw_letter(self):
+    def draw(self):
         self.window.blit(self.letter, [self.x, self.y])

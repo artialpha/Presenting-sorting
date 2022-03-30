@@ -1,5 +1,4 @@
 import random
-import numpy as np
 from unittest import TestCase
 from QuickSort import QuickSort
 

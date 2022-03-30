@@ -10,7 +10,7 @@ class Button(DrawObject):
         self.window = window
         self.rect = None
 
-    def draw_button(self):
+    def draw(self):
         self.rect = pygame.draw.rect(self.window, (100, 100, 100), (self.x, self.y, self.width, self.height), 0)
         self.window.blit(self.text, (self.x + (self.width/2 - self.text.get_width()/2), self.y
                                             + (self.height/2 - self.text.get_height()/2)))

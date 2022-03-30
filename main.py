@@ -38,8 +38,6 @@ def main():
                 if event.key == pygame.K_UP:
                     print("click!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                     draw.move(dt, fps, velocity)
-                    print(draw.size_of_digit_y)
-                    print(draw.list_display)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     # Use event.pos or pg.mouse.get_pos().

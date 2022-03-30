@@ -23,6 +23,15 @@ class ListToDraw(DrawObject):
     def __getitem__(self, item):
         return self.list_display[item]
 
+    def draw(self):
+        self.window.fill(self.WHITE)
+        for number, cords in self.list_display:
+            number_display = self.FONT.render(str(number), True, self.BLACK)
+            self.window.blit(number_display, cords)
+
+    def swap(self):
+        pass
+
     def prepare_list_display(self):
         width_window, height_window = self.window.get_size()
 
@@ -43,8 +52,3 @@ class ListToDraw(DrawObject):
                           range(-length_lst_half, length_lst_half+1)]
         self.list_display = list(zip(self.lst, list_cords))
 
-    def display_list(self):
-        self.window.fill(self.WHITE)
-        for number, cords in self.list_display:
-            number_display = self.FONT.render(str(number), True, self.BLACK)
-            self.window.blit(number_display, cords)

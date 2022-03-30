@@ -1,13 +1,11 @@
-from Sort import Sort
-import random
+from Algorithm.Sort import Sort
 
 
 class QuickSort(Sort):
 
-    def __init__(self, data, draw):
-        super().__init__(data)
-        self.pivot_index = len(data) - 1
-        self.draw = draw
+    def __init__(self, draw_data=None):
+        super().__init__()
+        self.draw_data = draw_data
 
     @classmethod
     def sort_data(cls, left_index, right_index, data):
@@ -15,8 +13,9 @@ class QuickSort(Sort):
             return data
 
         if left_index < right_index:
-            pivot = cls.partition(left_index, right_index, data)
             # here i draw li, ri, pivot, edges
+            pivot = cls.partition(left_index, right_index, data)
+
             cls.sort_data(left_index, pivot-1, data)
             cls.sort_data(pivot+1, right_index, data)
 
@@ -34,6 +33,6 @@ class QuickSort(Sort):
             else:
                 left_index += 1
 
-        pivot_index, right_index = right_index, pivot_index
         data[pivot_index], data[right_index] = data[right_index], data[pivot_index]
-        return pivot_index
+        # right_index is the place of a new pivot
+        return right_index
