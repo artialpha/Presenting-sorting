@@ -24,7 +24,7 @@ class TestQuickSortDraw(TestCase):
         ('left', 1) counter 4               l1
         ('left', 1) counter 5               l2
         ('right-pivot',) counter 6          [2, 1, 3, 4, 5]
-        ((0, 1, 1), (2, 2, 4)) counter 7    l0 r1 p1
+        ((0, 1, 1), (2, 2, 4)) counter 7    l0 r1 p1 PREV: 2, 2, 4
         ('right', -1) counter 8             r0
         ('right-pivot',) counter 9          [1, 2, 3, 4, 5]
         ((3, 4, 4), (0, 0, 1)) counter 10   l3 r4 p4
@@ -49,17 +49,17 @@ class TestQuickSortDraw(TestCase):
         step = 0
 
         # 0 step = place pivot, right and left
-        draw_to_test.steps[step][0](*draw_to_test.steps[step][1])
+        draw_to_test.steps[step][0](step)
         self.assertEqual(draw_to_test.right_index, 4)
 
         # 1 step = right--
         step += 1
-        draw_to_test.steps[step][0](*draw_to_test.steps[step][1])
+        draw_to_test.steps[step][0](step)
         self.assertEqual(draw_to_test.right_index, 3)
 
         # 2 step = right --
         step += 1
-        draw_to_test.steps[step][0](*draw_to_test.steps[step][1])
+        draw_to_test.steps[step][0](step)
         self.assertEqual(draw_to_test.right_index, 2)
 
         # 3 step = swap left nad right value
@@ -68,7 +68,7 @@ class TestQuickSortDraw(TestCase):
         step += 1
         self.assertEqual(draw_to_test.data[draw_to_test.right_index], 2)
         self.assertEqual(draw_to_test.data[draw_to_test.left_index], 5)
-        draw_to_test.steps[step][0](*draw_to_test.steps[step][1])
+        draw_to_test.steps[step][0](step)
         self.assertEqual(draw_to_test.data[draw_to_test.right_index], 5)
         self.assertEqual(draw_to_test.data[draw_to_test.left_index], 2)
         print(draw_to_test, '')
@@ -105,21 +105,21 @@ class TestQuickSortDraw(TestCase):
         print(step, 'step 0')
         # move to 4th step
         for s in range(5):
-            draw_to_test.steps[s][0](*draw_to_test.steps[s][1])
+            draw_to_test.steps[s][0](s)
             print(s, 's')
             step = s
         self.assertEqual(draw_to_test.left_index, 1)
 
         # 5 step
         step += 1
-        draw_to_test.steps[step][0](*draw_to_test.steps[step][1])
+        draw_to_test.steps[step][0](step)
         self.assertEqual(draw_to_test.left_index, 2)
 
         # 6 step swap values of right and pivot
         step += 1
         self.assertEqual(draw_to_test.data[draw_to_test.right_index], 5)
         self.assertEqual(draw_to_test.data[draw_to_test.pivot_index], 3)
-        draw_to_test.steps[step][0](*draw_to_test.steps[step][1])
+        draw_to_test.steps[step][0](step)
         self.assertEqual(draw_to_test.data[draw_to_test.right_index], 3)
         self.assertEqual(draw_to_test.data[draw_to_test.pivot_index], 5)
 
@@ -128,7 +128,7 @@ class TestQuickSortDraw(TestCase):
         self.assertEqual(draw_to_test.left_index, 2)
         self.assertEqual(draw_to_test.right_index, 2)
         self.assertEqual(draw_to_test.pivot_index, 4)
-        draw_to_test.steps[step][0](*draw_to_test.steps[step][1])
+        draw_to_test.steps[step][0](step)
         self.assertEqual(draw_to_test.left_index, 0)
         self.assertEqual(draw_to_test.right_index, 1)
         self.assertEqual(draw_to_test.pivot_index, 1)
@@ -136,9 +136,30 @@ class TestQuickSortDraw(TestCase):
         # 8 step
         step += 1
         self.assertEqual(draw_to_test.right_index, 1)
-        draw_to_test.steps[step][0](*draw_to_test.steps[step][1])
+        draw_to_test.steps[step][0](step)
         self.assertEqual(draw_to_test.right_index, 0)
 
+        # undo 8step
+        draw_to_test.step_back(step)
+        self.assertEqual(draw_to_test.right_index, 1)
+
+        # undo 7step
+        step -= 1
+        self.assertEqual(draw_to_test.left_index, 0)
+        self.assertEqual(draw_to_test.right_index, 1)
+        self.assertEqual(draw_to_test.pivot_index, 1)
+        draw_to_test.step_back(step)
+        self.assertEqual(draw_to_test.left_index, 2)
+        self.assertEqual(draw_to_test.right_index, 2)
+        self.assertEqual(draw_to_test.pivot_index, 4)
+
+        # undo 7step
+        step -= 1
+        self.assertEqual(draw_to_test.data[draw_to_test.right_index], 3)
+        self.assertEqual(draw_to_test.data[draw_to_test.pivot_index], 5)
+        draw_to_test.step_back(step)
+        self.assertEqual(draw_to_test.data[draw_to_test.right_index], 5)
+        self.assertEqual(draw_to_test.data[draw_to_test.pivot_index], 3)
 
     def test_first_test(self):
         draw_list = []
@@ -146,6 +167,7 @@ class TestQuickSortDraw(TestCase):
         for unsorted in first_test:
             draw = QuickSortDraw(copy.copy(unsorted))
             draw.sort_data(0, len(unsorted)-1, unsorted)
+            draw.reset_indexes()
             draw_list.append(draw)
 
         for draw in draw_list:
