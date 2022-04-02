@@ -4,7 +4,7 @@ from Window.DrawObject import DrawObject
 
 class Button(DrawObject):
 
-    def __init__(self, width, height, x, y, text, window):
+    def __init__(self, window, x, y, width, height, text):
         super().__init__(window, x, y, width, height)
         self.text = self.FONT.render(str(text), True, self.BLACK)
         self.window = window

@@ -1,9 +1,8 @@
 import pygame
 import random
-from Window.ListToDraw import ListToDraw
+from Window.AlgsDraw.QuickListDraw import QuickListDraw
 from Window.Button import Button
-from Window.Letter import Letter
-from Window.Edge import Edge
+from Window.Text import Text
 
 
 class Draw:
@@ -20,24 +19,33 @@ class Draw:
         self.draw_window()
 
         # list of random numbers
-        #lst = random.sample(range(10, 100), 9)
-        lst = [3, 1, 9, 7, 8, 2, 6, 4, 5]
+        lst = random.sample(range(10, 100), 9)
+        # lst = [3, 1, 9, 7, 8, 2, 6, 4, 5]
         print(lst)
-        self.list_draw = ListToDraw(lst, self.window, self.width / 2, self.height / 4)
+        self.list_draw = QuickListDraw(lst, self.window, self.width / 2, self.height / 4)
         self.elements.append(self.list_draw)
 
         # Buttons
-        self.padding_button = 10
-        self.button_next = Button(width=80, height=50, x=self.width/2 + self.padding_button, y=self.height*(3/4),
-                                  text="next", window=self.window)
-        self.button_prev = Button(width=80, height=50, x=self.width/2-80 - self.padding_button, y=self.height*(3/4),
-                                  text="prev", window=self.window)
+        width = 80
+        height = 50
+        x = self.width/2
+        y = self.height*(3/4)
+        padding = 10
+        self.button_prev = Button(self.window, x-width-padding, y, width, height, "prev")
+        self.button_next = Button(self.window, x+padding, y, width, height, "next")
         self.elements.append(self.button_next)
         self.elements.append(self.button_prev)
 
-        self.left_index = None
-        self.right_index = None
-        self.pivot_index = None
+        # Counter of steps
+        x = (self.width/2)
+        y = self.height*(3/4)-50
+        padding = 10
+        self.max_steps = Text(self.window, x + padding, y, str(len(self.list_draw.quick_sort_data.steps)))
+        max_steps_width = self.max_steps.text.get_size()[0]
+        self.current_number = Text(self.window, x - max_steps_width - padding, y, '0')
+
+        self.elements.append(self.current_number)
+        self.elements.append(self.max_steps)
 
     def draw_window(self):
         self.window = pygame.display.set_mode((self.width, self.height))
@@ -47,90 +55,10 @@ class Draw:
         for x in self.elements:
             x.draw()
 
-    def button_clicked(self, prev=False):
-        qs_data = self.list_draw.quick_sort_data
-        if 0 <= self.list_draw.step_counter <= len(qs_data.steps):
-            if prev:
-                self.list_draw.step_counter -= 1
-                qs_data.step_back(self.list_draw.step_counter)
-            step = qs_data[self.list_draw.step_counter]
-            method = step[0]
-            arguments = step[1]
-            # make this step in a container
-            if not prev:
-                method(self.list_draw.step_counter)
+    def click(self, prev=False):
+        self.list_draw.button_clicked(prev)
+        self.current_number.text = self.list_draw.step_counter
 
-            if arguments[0] == 'left' or arguments[0] == 'right':
-                self.move_index(prev)
-            elif arguments[0] == 'left-right' or arguments[0] == 'right-pivot':
-                self.swap_values()
-            else:
-                self.draw_indexes(prev)
-
-            if not prev:
-                self.list_draw.step_counter += 1
-
-    def move_index(self, prev=False):
-        digit_x_size = self.list_draw.size_of_number
-        padding = self.list_draw.padding
-
-        steps = self.list_draw.quick_sort_data
-        arguments = steps[self.list_draw.step_counter][1]
-        index, movement = arguments
-
-        movement = -movement if prev else movement
-
-        if index == 'left':
-            self.left_index.x += (digit_x_size+padding) * movement
-        else:
-            self.right_index.x += (digit_x_size+padding) * movement
-
-    def swap_values(self):
-        step = self.list_draw.quick_sort_data[self.list_draw.step_counter]
-        left_index = self.list_draw.quick_sort_data.left_index
-        right_index = self.list_draw.quick_sort_data.right_index
-        pivot_index = self.list_draw.quick_sort_data.pivot_index
-
-        lst = self.list_draw.list_display
-
-        if step[1][0] == 'left-right':
-            lst[left_index][0], lst[right_index][0] = lst[right_index][0], lst[left_index][0]
-        else:
-            lst[pivot_index][0], lst[right_index][0] = lst[right_index][0], lst[pivot_index][0]
-
-    def draw_indexes(self, prev=False):
-        digit_y_size = self.list_draw.size_of_digit_y
-
-        step = self.list_draw.quick_sort_data[self.list_draw.step_counter]
-
-        print(step[1][0], 'next')
-        print(step[1][1], 'prev')
-        # indexes
-        if prev:
-            left, right, pivot = step[1][1]
-        else:
-            left, right, pivot = step[1][0]
-
-        # take tuple which consists of information value + position
-        left_number = self.list_draw[left]
-        right_number = self.list_draw[right]
-        pivot_number = self.list_draw[pivot]
-
-        left_x, left_y = left_number[1]
-        right_x, right_y = right_number[1]
-        pivot_x, pivot_y = pivot_number[1]
-
-        if self.left_index:
-            self.left_index.x, self.left_index.y = left_x, left_y + digit_y_size
-            self.right_index.x, self.right_index.y = right_x, right_y + digit_y_size
-            self.pivot_index.x, self.pivot_index.y = pivot_x, pivot_y - digit_y_size
-        else:
-            self.left_index = Letter(self.window, left_x, left_y + digit_y_size, 'i')
-            self.right_index = Letter(self.window, right_x, right_y + digit_y_size, 'j')
-            self.pivot_index = Letter(self.window, pivot_x, pivot_y - digit_y_size, 'p')
-            self.elements.append(self.left_index)
-            self.elements.append(self.right_index)
-            self.elements.append(self.pivot_index)
 
 '''
     def move(self, dt, fps, velocity):
@@ -142,6 +70,3 @@ class Draw:
             pygame.display.update()
         self.list_display[0][1][1] = round(self.list_display[0][1][1], 2)
 '''
-
-
-

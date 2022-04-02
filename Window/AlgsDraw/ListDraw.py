@@ -1,19 +1,13 @@
 import math
-import time
-
 from Window.DrawObject import DrawObject
-from Window.Algs.QuickSortStepContainer import QuickSortStepContainer
-import copy
 
 
-class ListToDraw(DrawObject):
+class ListDraw(DrawObject):
+
     def __init__(self, lst, window, x, y):
         super().__init__(x=x, y=y, window=window)
         self.lst = lst
         self.list_display = None
-
-        self.quick_sort_data = QuickSortStepContainer(copy.copy(lst))
-        self.quick_sort_data.prepare_steps()
         self.step_counter = 0
 
         number_of_digits = int(math.log10(max(lst)))+1
@@ -24,7 +18,6 @@ class ListToDraw(DrawObject):
         # print(self.size_of_number, 'self.size_of_number')
         self.space_for_number = self.size_of_number + self.padding
         # print(self.space_for_number, 'self.space_for_number')
-        self.cords = [100, 50]
         self.prepare_list_display()
         print(self.list_display)
 
@@ -56,5 +49,4 @@ class ListToDraw(DrawObject):
             list_cords = [[x + element*self.space_for_number, y] for element in
                           range(-length_lst_half, length_lst_half+1)]
         self.list_display = list((list(i) for i in zip(self.lst, list_cords)))
-
 
