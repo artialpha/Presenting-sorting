@@ -47,26 +47,30 @@ class Draw:
         for x in self.elements:
             x.draw()
 
-    def next_clicked(self):
+    def button_clicked(self, prev=False):
         qs_data = self.list_draw.quick_sort_data
-        if self.list_draw.step_counter < len(qs_data.steps):
+        if 0 <= self.list_draw.step_counter <= len(qs_data.steps):
+            if prev:
+                self.list_draw.step_counter -= 1
+                qs_data.step_back(self.list_draw.step_counter)
             step = qs_data[self.list_draw.step_counter]
             method = step[0]
             arguments = step[1]
-            method(self.list_draw.step_counter)
+            # make this step in a container
+            if not prev:
+                method(self.list_draw.step_counter)
 
             if arguments[0] == 'left' or arguments[0] == 'right':
-                self.move_index(self.list_draw.step_counter)
+                self.move_index(prev)
             elif arguments[0] == 'left-right' or arguments[0] == 'right-pivot':
-                self.swap_values(self.list_draw.step_counter)
+                self.swap_values()
             else:
-                self.draw_indexes(self.list_draw.step_counter)
-            self.list_draw.step_counter += 1
+                self.draw_indexes(prev)
 
-    def prev_clicked(self):
-        pass
+            if not prev:
+                self.list_draw.step_counter += 1
 
-    def move_index(self, i):
+    def move_index(self, prev=False):
         digit_x_size = self.list_draw.size_of_number
         padding = self.list_draw.padding
 
@@ -74,13 +78,15 @@ class Draw:
         arguments = steps[self.list_draw.step_counter][1]
         index, movement = arguments
 
+        movement = -movement if prev else movement
+
         if index == 'left':
             self.left_index.x += (digit_x_size+padding) * movement
         else:
             self.right_index.x += (digit_x_size+padding) * movement
 
-    def swap_values(self, i):
-        step = self.list_draw.quick_sort_data[i]
+    def swap_values(self):
+        step = self.list_draw.quick_sort_data[self.list_draw.step_counter]
         left_index = self.list_draw.quick_sort_data.left_index
         right_index = self.list_draw.quick_sort_data.right_index
         pivot_index = self.list_draw.quick_sort_data.pivot_index
@@ -92,13 +98,18 @@ class Draw:
         else:
             lst[pivot_index][0], lst[right_index][0] = lst[right_index][0], lst[pivot_index][0]
 
-    def draw_indexes(self, i):
+    def draw_indexes(self, prev=False):
         digit_y_size = self.list_draw.size_of_digit_y
 
-        step = self.list_draw.quick_sort_data[i]
+        step = self.list_draw.quick_sort_data[self.list_draw.step_counter]
 
+        print(step[1][0], 'next')
+        print(step[1][1], 'prev')
         # indexes
-        left, right, pivot = step[1][0]
+        if prev:
+            left, right, pivot = step[1][1]
+        else:
+            left, right, pivot = step[1][0]
 
         # take tuple which consists of information value + position
         left_number = self.list_draw[left]
@@ -121,6 +132,7 @@ class Draw:
             self.elements.append(self.right_index)
             self.elements.append(self.pivot_index)
 
+'''
     def move(self, dt, fps, velocity):
         distance = self.size_of_digit_y
         for x in range(int(fps/velocity)):
@@ -129,5 +141,7 @@ class Draw:
             self.redraw_window()
             pygame.display.update()
         self.list_display[0][1][1] = round(self.list_display[0][1][1], 2)
+'''
+
 
 

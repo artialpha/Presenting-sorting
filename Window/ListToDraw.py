@@ -2,7 +2,7 @@ import math
 import time
 
 from Window.DrawObject import DrawObject
-from Window.Algs.QuickSortDraw import QuickSortDraw
+from Window.Algs.QuickSortStepContainer import QuickSortStepContainer
 import copy
 
 
@@ -12,7 +12,7 @@ class ListToDraw(DrawObject):
         self.lst = lst
         self.list_display = None
 
-        self.quick_sort_data = QuickSortDraw(copy.copy(lst))
+        self.quick_sort_data = QuickSortStepContainer(copy.copy(lst))
         self.quick_sort_data.prepare_steps()
         self.step_counter = 0
 

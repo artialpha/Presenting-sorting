@@ -41,12 +41,16 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     # Use event.pos or pg.mouse.get_pos().
+                    print(draw.list_draw.step_counter, 'before')
                     if draw.button_next.rect.collidepoint(event.pos):
-                        draw.next_clicked()
-                        # for x in draw.list_to_display.steps.steps:
-                            # print(x)
+                        if draw.list_draw.step_counter < len(draw.list_draw.quick_sort_data.steps):
+                            draw.button_clicked()
+
                     if draw.button_prev.rect.collidepoint(event.pos):
-                        print('prev clicked')
+                        if 1 < draw.list_draw.step_counter:
+                            draw.button_clicked(True)
+                    print(draw.list_draw.step_counter, 'after')
+
 
 
 if __name__ == "__main__":

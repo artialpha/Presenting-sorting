@@ -2,16 +2,16 @@ from Algorithm.QuickSort import QuickSort
 import copy
 
 
-class QuickSortDraw(QuickSort):
+class QuickSortStepContainer(QuickSort):
 
     def __init__(self, lst, draw=None):
         super().__init__()
         if draw:
             self.draw = draw
         self.lst = lst
-        self.pivot_index = 0
-        self.left_index = 0
-        self.right_index = 0
+        self.pivot_index = None
+        self.left_index = None
+        self.right_index = None
         self.steps = []
 
     def __iadd__(self, other):

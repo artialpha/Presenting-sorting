@@ -1,5 +1,5 @@
 from unittest import TestCase
-from QuickSortDraw import QuickSortDraw
+from QuickSortStepContainer import QuickSortStepContainer
 import copy
 import random
 
@@ -37,8 +37,9 @@ class TestQuickSortDraw(TestCase):
         draw_list = []
 
         for unsorted in first_test:
-            draw = QuickSortDraw(copy.copy(unsorted))
-            draw.quick_sort(0, len(unsorted) - 1, unsorted)
+            print(unsorted, 'unsorted')
+            draw = QuickSortStepContainer(unsorted)
+            draw.quick_sort(0, len(unsorted) - 1, copy.copy(unsorted))
             draw_list.append(draw)
 
         for draw in draw_list:
@@ -165,8 +166,8 @@ class TestQuickSortDraw(TestCase):
         draw_list = []
 
         for unsorted in first_test:
-            draw = QuickSortDraw(copy.copy(unsorted))
-            draw.quick_sort(0, len(unsorted) - 1, unsorted)
+            draw = QuickSortStepContainer(copy.copy(unsorted))
+            draw.quick_sort(0, len(unsorted) - 1, copy.copy(unsorted))
             draw.reset_indexes()
             draw_list.append(draw)
 
@@ -182,7 +183,7 @@ class TestQuickSortDraw(TestCase):
         draw_list = []
 
         for unsorted in data_test:
-            draw = QuickSortDraw(copy.copy(unsorted))
+            draw = QuickSortStepContainer(copy.copy(unsorted))
             draw.quick_sort(0, len(unsorted) - 1, unsorted)
             draw_list.append(draw)
 
