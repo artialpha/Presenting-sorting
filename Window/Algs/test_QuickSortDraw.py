@@ -38,7 +38,7 @@ class TestQuickSortDraw(TestCase):
 
         for unsorted in first_test:
             draw = QuickSortDraw(copy.copy(unsorted))
-            draw.sort_data(0, len(unsorted)-1, unsorted)
+            draw.quick_sort(0, len(unsorted) - 1, unsorted)
             draw_list.append(draw)
 
         for draw in draw_list:
@@ -66,19 +66,19 @@ class TestQuickSortDraw(TestCase):
         # before swap:  left = 5, right = 2
         # after:        right = 2, left = 5
         step += 1
-        self.assertEqual(draw_to_test.data[draw_to_test.right_index], 2)
-        self.assertEqual(draw_to_test.data[draw_to_test.left_index], 5)
+        self.assertEqual(draw_to_test.lst[draw_to_test.right_index], 2)
+        self.assertEqual(draw_to_test.lst[draw_to_test.left_index], 5)
         draw_to_test.steps[step][0](step)
-        self.assertEqual(draw_to_test.data[draw_to_test.right_index], 5)
-        self.assertEqual(draw_to_test.data[draw_to_test.left_index], 2)
+        self.assertEqual(draw_to_test.lst[draw_to_test.right_index], 5)
+        self.assertEqual(draw_to_test.lst[draw_to_test.left_index], 2)
         print(draw_to_test, '')
 
         # Now i go back
         # performing a "step back" should swap back values at left and right index
         # I don't change the value of the step because I want to undo step at this index
         draw_to_test.step_back(step)
-        self.assertEqual(draw_to_test.data[draw_to_test.right_index], 2)
-        self.assertEqual(draw_to_test.data[draw_to_test.left_index], 5)
+        self.assertEqual(draw_to_test.lst[draw_to_test.right_index], 2)
+        self.assertEqual(draw_to_test.lst[draw_to_test.left_index], 5)
 
         # Undo 2 step - it means that right index should be increased by one
         step -= 1
@@ -117,11 +117,11 @@ class TestQuickSortDraw(TestCase):
 
         # 6 step swap values of right and pivot
         step += 1
-        self.assertEqual(draw_to_test.data[draw_to_test.right_index], 5)
-        self.assertEqual(draw_to_test.data[draw_to_test.pivot_index], 3)
+        self.assertEqual(draw_to_test.lst[draw_to_test.right_index], 5)
+        self.assertEqual(draw_to_test.lst[draw_to_test.pivot_index], 3)
         draw_to_test.steps[step][0](step)
-        self.assertEqual(draw_to_test.data[draw_to_test.right_index], 3)
-        self.assertEqual(draw_to_test.data[draw_to_test.pivot_index], 5)
+        self.assertEqual(draw_to_test.lst[draw_to_test.right_index], 3)
+        self.assertEqual(draw_to_test.lst[draw_to_test.pivot_index], 5)
 
         # 7 step new place for indexes
         step += 1
@@ -155,41 +155,41 @@ class TestQuickSortDraw(TestCase):
 
         # undo 7step
         step -= 1
-        self.assertEqual(draw_to_test.data[draw_to_test.right_index], 3)
-        self.assertEqual(draw_to_test.data[draw_to_test.pivot_index], 5)
+        self.assertEqual(draw_to_test.lst[draw_to_test.right_index], 3)
+        self.assertEqual(draw_to_test.lst[draw_to_test.pivot_index], 5)
         draw_to_test.step_back(step)
-        self.assertEqual(draw_to_test.data[draw_to_test.right_index], 5)
-        self.assertEqual(draw_to_test.data[draw_to_test.pivot_index], 3)
+        self.assertEqual(draw_to_test.lst[draw_to_test.right_index], 5)
+        self.assertEqual(draw_to_test.lst[draw_to_test.pivot_index], 3)
 
     def test_first_test(self):
         draw_list = []
 
         for unsorted in first_test:
             draw = QuickSortDraw(copy.copy(unsorted))
-            draw.sort_data(0, len(unsorted)-1, unsorted)
+            draw.quick_sort(0, len(unsorted) - 1, unsorted)
             draw.reset_indexes()
             draw_list.append(draw)
 
         for draw in draw_list:
-            print(draw.data, 'before')
-            draw.perform_steps()
-            print(draw.data, 'after\n')
+            print(draw.lst, 'before')
+            draw.execute_steps()
+            print(draw.lst, 'after\n')
 
         for draw in draw_list:
-            self.assertTrue(all(draw.data[i] <= draw.data[i+1] for i in range(len(draw.data) - 1)))
+            self.assertTrue(all(draw.lst[i] <= draw.lst[i + 1] for i in range(len(draw.lst) - 1)))
 
     def test_data_test(self):
         draw_list = []
 
         for unsorted in data_test:
             draw = QuickSortDraw(copy.copy(unsorted))
-            draw.sort_data(0, len(unsorted)-1, unsorted)
+            draw.quick_sort(0, len(unsorted) - 1, unsorted)
             draw_list.append(draw)
 
         for draw in draw_list:
-            print(draw.data, 'before')
-            draw.perform_steps()
-            print(draw.data, 'after\n')
+            print(draw.lst, 'before')
+            draw.execute_steps()
+            print(draw.lst, 'after\n')
 
         for draw in draw_list:
-            self.assertTrue(all(draw.data[i] <= draw.data[i+1] for i in range(len(draw.data) - 1)))
+            self.assertTrue(all(draw.lst[i] <= draw.lst[i + 1] for i in range(len(draw.lst) - 1)))

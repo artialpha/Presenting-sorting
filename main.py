@@ -42,7 +42,9 @@ def main():
                 if event.button == 1:
                     # Use event.pos or pg.mouse.get_pos().
                     if draw.button_next.rect.collidepoint(event.pos):
-                        print('next clicked', draw.button_next.rect)
+                        draw.next_clicked()
+                        # for x in draw.list_to_display.steps.steps:
+                            # print(x)
                     if draw.button_prev.rect.collidepoint(event.pos):
                         print('prev clicked')
 

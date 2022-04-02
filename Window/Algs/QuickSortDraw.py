@@ -1,13 +1,14 @@
 from Algorithm.QuickSort import QuickSort
+import copy
 
 
 class QuickSortDraw(QuickSort):
 
-    def __init__(self, data, draw=None):
+    def __init__(self, lst, draw=None):
         super().__init__()
         if draw:
             self.draw = draw
-        self.data = data
+        self.lst = lst
         self.pivot_index = 0
         self.left_index = 0
         self.right_index = 0
@@ -21,11 +22,15 @@ class QuickSortDraw(QuickSort):
         return self.steps[index]
 
     def __str__(self):
-        return f'\nleft: i{self.left_index}, v{self.data[self.left_index]}' \
-               f'{self.data}\nright: i{self.right_index}, v{self.data[self.right_index]}' \
-               f'\npivot: i{self.pivot_index}, v{self.data[self.pivot_index]}'
+        return f'\nleft: i{self.left_index}, v{self.lst[self.left_index]}' \
+               f'{self.lst}\nright: i{self.right_index}, v{self.lst[self.right_index]}' \
+               f'\npivot: i{self.pivot_index}, v{self.lst[self.pivot_index]}'
 
-    def sort_data(self, left_index, right_index, data):
+    def prepare_steps(self):
+        copy_list = copy.copy(self.lst)
+        self.quick_sort(0, len(copy_list) - 1, copy_list)
+
+    def quick_sort(self, left_index, right_index, data):
         if len(data) == 1:
             return data
 
@@ -33,8 +38,8 @@ class QuickSortDraw(QuickSort):
             # here i draw li, ri, pivot, edges
             pivot = self.partition(left_index, right_index, data)
 
-            self.sort_data(left_index, pivot-1, data)
-            self.sort_data(pivot+1, right_index, data)
+            self.quick_sort(left_index, pivot - 1, data)
+            self.quick_sort(pivot + 1, right_index, data)
 
     def partition(self, left_index, right_index, data):
         pivot_index = right_index
@@ -63,7 +68,7 @@ class QuickSortDraw(QuickSort):
         # right_index is the place of a new pivot
         return right_index
 
-    def perform_steps(self):
+    def execute_steps(self):
         print("i do steps")
         i = 0
 
@@ -88,11 +93,11 @@ class QuickSortDraw(QuickSort):
     def swap_index(self, i):
         method_arguments = self.steps[i][1]
         if method_arguments[0] == 'left-right':
-            self.data[self.left_index], self.data[self.right_index] \
-                = self.data[self.right_index], self.data[self.left_index]
+            self.lst[self.left_index], self.lst[self.right_index] \
+                = self.lst[self.right_index], self.lst[self.left_index]
         elif method_arguments[0] == 'right-pivot':
-            self.data[self.pivot_index], self.data[self.right_index] \
-                = self.data[self.right_index], self.data[self.pivot_index]
+            self.lst[self.pivot_index], self.lst[self.right_index] \
+                = self.lst[self.right_index], self.lst[self.pivot_index]
         else:
             print('i did not do anything', method_arguments)
 
