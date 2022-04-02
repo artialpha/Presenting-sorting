@@ -10,7 +10,9 @@ class Draw:
     elements = []
 
     def __init__(self, width, height, fps, velocity):
-        self.width = width
+        self.width_for_scroll = 0
+        self.width = width + self.width_for_scroll
+
         self.height = height
         self.fps = fps
         self.velocity = velocity
@@ -22,13 +24,13 @@ class Draw:
         lst = random.sample(range(10, 100), 9)
         # lst = [3, 1, 9, 7, 8, 2, 6, 4, 5]
         print(lst)
-        self.list_draw = QuickListDraw(lst, self.window, self.width / 2, self.height / 4)
+        self.list_draw = QuickListDraw(lst, self.window, self.width-self.width_for_scroll, self.height)
         self.elements.append(self.list_draw)
 
         # Buttons
         width = 80
         height = 50
-        x = self.width/2
+        x = (self.width-self.width_for_scroll)/2
         y = self.height*(3/4)
         padding = 10
         self.button_prev = Button(self.window, x-width-padding, y, width, height, "prev")
@@ -37,7 +39,7 @@ class Draw:
         self.elements.append(self.button_prev)
 
         # Counter of steps
-        x = (self.width/2)
+        x = (self.width-self.width_for_scroll)/2
         y = self.height*(3/4)-50
         padding = 10
         self.max_steps = Text(self.window, x + padding, y, str(len(self.list_draw.quick_sort_data.steps)))

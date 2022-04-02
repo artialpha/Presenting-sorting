@@ -15,7 +15,7 @@ class ListDraw(DrawObject):
 
         self.size_of_number = self.size_of_digit_x*number_of_digits
         self.padding = 20
-        # print(self.size_of_number, 'self.size_of_number')
+        # print(self.size_of_number, 'self.size_of_number') 2 digits size x = 30 for FONT=30
         self.space_for_number = self.size_of_number + self.padding
         # print(self.space_for_number, 'self.space_for_number')
         self.prepare_list_display()
@@ -31,20 +31,18 @@ class ListDraw(DrawObject):
             self.window.blit(number_display, cords)
 
     def prepare_list_display(self):
-        width_window, height_window = self.window.get_size()
-
         length_lst_half = (len(self.lst) / 2)
-        y = height_window / 4
+        y = self.y / 4
 
         if length_lst_half.is_integer():
             length_lst_half = int(length_lst_half)
-            x = (width_window + self.padding) / 2
+            x = (self.x + self.padding) / 2
 
             list_cords = [[x + element*self.space_for_number, y] for element in
                           range(-length_lst_half, length_lst_half)]
         else:
             length_lst_half = int(length_lst_half)
-            x = (width_window - self.size_of_number) / 2
+            x = (self.x - self.size_of_number) / 2
 
             list_cords = [[x + element*self.space_for_number, y] for element in
                           range(-length_lst_half, length_lst_half+1)]
