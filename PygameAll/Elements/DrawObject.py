@@ -5,6 +5,8 @@ pygame.init()
 class DrawObject:
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
+    BACKGROUND_COLOR = BLACK
+    TEXT_COLOR = WHITE
     FONT = pygame.font.SysFont("Times New Roman", 30)
 
     def __init__(self, window, x, y, width=0, height=0):

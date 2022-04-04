@@ -1,5 +1,5 @@
 import pygame
-from Window.DrawObject import DrawObject
+from PygameAll.Elements.DrawObject import DrawObject
 
 
 class Edge(DrawObject):

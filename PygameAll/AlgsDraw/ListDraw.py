@@ -1,5 +1,5 @@
 import math
-from Window.DrawObject import DrawObject
+from PygameAll.Elements.DrawObject import DrawObject
 
 
 class ListDraw(DrawObject):
@@ -25,9 +25,9 @@ class ListDraw(DrawObject):
         return self.list_display[item]
 
     def draw(self):
-        self.window.fill(self.WHITE)
+        self.window.fill(self.BACKGROUND_COLOR)
         for number, cords in self.list_display:
-            number_display = self.FONT.render(str(number), True, self.BLACK)
+            number_display = self.FONT.render(str(number), True, self.TEXT_COLOR)
             self.window.blit(number_display, cords)
 
     def prepare_list_display(self):

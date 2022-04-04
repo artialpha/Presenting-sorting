@@ -99,9 +99,9 @@ class TestQuickSortDraw(TestCase):
         self.assertEqual(draw_to_test.pivot_index, 4)
         step -= 1
         draw_to_test.step_back(step)
-        self.assertEqual(draw_to_test.left_index, 0)
-        self.assertEqual(draw_to_test.right_index, 0)
-        self.assertEqual(draw_to_test.pivot_index, 0)
+        self.assertEqual(draw_to_test.left_index, None)
+        self.assertEqual(draw_to_test.right_index, None)
+        self.assertEqual(draw_to_test.pivot_index, None)
 
         print(step, 'step 0')
         # move to 4th step

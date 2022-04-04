@@ -1,6 +1,7 @@
 import pygame
 import time
-from Window.Draw import Draw
+from PygameAll.Window.WindowQuick import WindowQuick
+from PygameAll.Window.WindowMenu import WindowMenu
 pygame.init()
 
 
@@ -16,7 +17,7 @@ def main():
     width = 600
     height = 400
 
-    draw = Draw(width, height, fps, velocity)
+    draw = WindowQuick(width, height, fps, velocity)
     while run:
         draw.redraw_window()
         pygame.display.update()
@@ -39,13 +40,7 @@ def main():
                 if event.button == 1:
                     # Use event.pos or pg.mouse.get_pos().
 
-                    if draw.button_next.rect.collidepoint(event.pos):
-                        if draw.list_draw.step_counter < len(draw.list_draw.quick_sort_data.steps):
-                            draw.click()
-
-                    if draw.button_prev.rect.collidepoint(event.pos):
-                        if 1 < draw.list_draw.step_counter:
-                            draw.click(True)
+                    draw.buttons_clicked_check(event)
 
 
 if __name__ == "__main__":

@@ -1,13 +1,11 @@
-from Algorithm.QuickSort import QuickSort
+from Algorithm.Quick.QuickSort import QuickSort
 import copy
 
 
 class QuickSortStepContainer(QuickSort):
 
-    def __init__(self, lst, draw=None):
+    def __init__(self, lst):
         super().__init__()
-        if draw:
-            self.draw = draw
         self.lst = lst
         self.pivot_index = None
         self.left_index = None

@@ -1,12 +1,12 @@
 import pygame
-from Window.DrawObject import DrawObject
+from PygameAll.Elements.DrawObject import DrawObject
 
 
-class Button(DrawObject):
+class TextArea(DrawObject):
 
     def __init__(self, window, x, y, width, height, text):
         super().__init__(window, x, y, width, height)
-        self.text = self.FONT.render(str(text), True, self.BLACK)
+        self.text = self.FONT.render(str(text), True, self.TEXT_COLOR)
         self.window = window
         self.rect = None
 

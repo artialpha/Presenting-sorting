@@ -3,9 +3,8 @@ from Algorithm.Sort import Sort
 
 class QuickSort(Sort):
 
-    def __init__(self, draw_data=None):
+    def __init__(self):
         super().__init__()
-        self.draw_data = draw_data
 
     @classmethod
     def sort_data(cls, left_index, right_index, data):

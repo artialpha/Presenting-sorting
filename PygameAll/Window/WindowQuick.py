@@ -1,40 +1,31 @@
 import pygame
 import random
-from Window.AlgsDraw.QuickListDraw import QuickListDraw
-from Window.Button import Button
-from Window.Text import Text
+from PygameAll.AlgsDraw.QuickListDraw import QuickListDraw
+from PygameAll.Elements.TextArea import TextArea
+from PygameAll.Elements.Text import Text
+from PygameAll.Window.Window import Window
 
 
-class Draw:
-    WHITE = (255, 255, 255)
-    elements = []
+class WindowQuick(Window):
 
     def __init__(self, width, height, fps, velocity):
-        self.width_for_scroll = 0
-        self.width = width + self.width_for_scroll
+        super().__init__(width, height, fps, velocity)
 
-        self.height = height
-        self.fps = fps
-        self.velocity = velocity
-
-        self.window = None
-        self.draw_window()
 
         # list of random numbers
-        lst = random.sample(range(10, 100), 9)
-        # lst = [3, 1, 9, 7, 8, 2, 6, 4, 5]
+        # lst = random.sample(range(10, 100), 9)
+        lst = [3, 1, 9, 7, 8, 2, 6, 4, 5]
         print(lst)
         self.list_draw = QuickListDraw(lst, self.window, self.width-self.width_for_scroll, self.height)
         self.elements.append(self.list_draw)
 
         # Buttons
-        width = 80
-        height = 50
         x = (self.width-self.width_for_scroll)/2
         y = self.height*(3/4)
         padding = 10
-        self.button_prev = Button(self.window, x-width-padding, y, width, height, "prev")
-        self.button_next = Button(self.window, x+padding, y, width, height, "next")
+        self.button_prev = TextArea(self.window, x - self.width_button - padding, y, self.width_button,
+                                    self.height_button, "prev")
+        self.button_next = TextArea(self.window, x + padding, y, self.width_button, self.height_button, "next")
         self.elements.append(self.button_next)
         self.elements.append(self.button_prev)
 
@@ -49,17 +40,18 @@ class Draw:
         self.elements.append(self.current_number)
         self.elements.append(self.max_steps)
 
-    def draw_window(self):
-        self.window = pygame.display.set_mode((self.width, self.height))
-        self.window.fill(self.WHITE)
-
-    def redraw_window(self):
-        for x in self.elements:
-            x.draw()
-
     def click(self, prev=False):
         self.list_draw.button_clicked(prev)
         self.current_number.text = self.list_draw.step_counter
+
+    def buttons_clicked_check(self, event):
+        if self.button_next.rect.collidepoint(event.pos):
+            if self.list_draw.step_counter < len(self.list_draw.quick_sort_data.steps):
+                self.click()
+
+        if self.button_prev.rect.collidepoint(event.pos):
+            if 1 < self.list_draw.step_counter:
+                self.click(True)
 
 
 '''

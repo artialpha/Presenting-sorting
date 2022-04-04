@@ -1,8 +1,6 @@
-import math
-from Window.DrawObject import DrawObject
-from Window.Algs.QuickSortStepContainer import QuickSortStepContainer
-from Window.Text import Text
-from Window.AlgsDraw.ListDraw import ListDraw
+from PygameAll.Algs.QuickSortStepContainer import QuickSortStepContainer
+from PygameAll.Elements.Text import Text
+from PygameAll.AlgsDraw.ListDraw import ListDraw
 import copy
 
 

@@ -1,4 +1,4 @@
-from Window.DrawObject import DrawObject
+from PygameAll.Elements.DrawObject import DrawObject
 
 
 class Text(DrawObject):
@@ -10,9 +10,9 @@ class Text(DrawObject):
 
     def __setattr__(self, att, value):
         if isinstance(value, str):
-            self.__dict__[att] = self.FONT.render(value, True, self.BLACK)
+            self.__dict__[att] = self.FONT.render(value, True, self.TEXT_COLOR)
         elif isinstance(value, int):
-            self.__dict__[att] = self.FONT.render(str(value), True, self.BLACK)
+            self.__dict__[att] = self.FONT.render(str(value), True, self.TEXT_COLOR)
         else:
             self.__dict__[att] = value
 
