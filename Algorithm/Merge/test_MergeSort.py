@@ -1,4 +1,5 @@
 from unittest import TestCase
+import random
 from Algorithm.Merge.MergeSort import MergeSort
 
 first_tests = [
@@ -14,6 +15,8 @@ seconds_tests = [
     [[[1, 3, 4, 5, 9], [2, 6, 7, 8, 10]], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
 ]
 
+data_test = [random.sample(range(100), 10) for y in range(20)]
+
 
 class TestMergeSort(TestCase):
     def test_merge(self):
@@ -25,17 +28,16 @@ class TestMergeSort(TestCase):
             j2 = len(test[0])-1
 
             merge = MergeSort()
-            merge.merge(i1, j1, i2, j2, test[0])
+            merge.merge2(i1, j1, i2, j2, test[0])
             print(test[0])
 
             self.assertEqual(test[0], test[1])
 
-    def test_merge2(self):
-
-        for test in seconds_tests:
-            merge = MergeSort()
-            lst = merge.merge2(test[0][0], test[0][1])
-            print(lst)
-
-            self.assertEqual(lst, test[1])
+    def test_sort(self):
+        merge = MergeSort()
+        for unsorted in data_test:
+            after_sorting = merge.sort_data(unsorted)
+            print(unsorted, 'before sorting')
+            print(after_sorting, 'after sorting\n')
+            self.assertEqual(sorted(unsorted), after_sorting)
 

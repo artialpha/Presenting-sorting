@@ -8,13 +8,11 @@ from PygameAll.Window.Window import Window
 
 class WindowQuick(Window):
 
-    def __init__(self, width, height, fps, velocity):
+    def __init__(self, width, height, fps, velocity, lst):
         super().__init__(width, height, fps, velocity)
 
 
-        # list of random numbers
-        # lst = random.sample(range(10, 100), 9)
-        lst = [3, 1, 9, 7, 8, 2, 6, 4, 5]
+
         print(lst)
         self.list_draw = QuickListDraw(lst, self.window, self.width-self.width_for_scroll, self.height)
         self.elements.append(self.list_draw)

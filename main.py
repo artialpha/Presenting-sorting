@@ -17,7 +17,11 @@ def main():
     width = 600
     height = 400
 
-    draw = WindowQuick(width, height, fps, velocity)
+    # list of random numbers
+    # lst = random.sample(range(10, 100), 9)
+    lst = [3, 1, 9, 7, 8, 2, 6, 4, 5]
+
+    draw = WindowQuick(width, height, fps, velocity, lst)
     while run:
         draw.redraw_window()
         pygame.display.update()

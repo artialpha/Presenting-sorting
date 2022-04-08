@@ -1,23 +1,15 @@
-from Algorithm.Quick.QuickSort import QuickSort
+from PygameAll.Algs.StepContainer import StepContainer
 import copy
 
 
-class QuickSortStepContainer(QuickSort):
+class QuickSortStepContainer(StepContainer):
 
     def __init__(self, lst):
-        super().__init__()
-        self.lst = lst
+        super().__init__(lst)
+
         self.pivot_index = None
         self.left_index = None
         self.right_index = None
-        self.steps = []
-
-    def __iadd__(self, other):
-        self.steps.append(other)
-        return self
-
-    def __getitem__(self, index):
-        return self.steps[index]
 
     def __str__(self):
         return f'\nleft: i{self.left_index}, v{self.lst[self.left_index]}' \
@@ -25,8 +17,9 @@ class QuickSortStepContainer(QuickSort):
                f'\npivot: i{self.pivot_index}, v{self.lst[self.pivot_index]}'
 
     def prepare_steps(self):
-        copy_list = copy.copy(self.lst)
-        self.quick_sort(0, len(copy_list) - 1, copy_list)
+        # I Copy because i do not want to affect the list of the object
+        # I want to sort it with 'steps'
+        self.quick_sort(0, len(self.lst) - 1, copy.copy(self.lst))
 
     def quick_sort(self, left_index, right_index, data):
         if len(data) == 1:
@@ -70,7 +63,6 @@ class QuickSortStepContainer(QuickSort):
         print("i do steps")
         i = 0
 
-        print(self)
         while i < len(self.steps):
             self.steps[i][0](i)
             i += 1

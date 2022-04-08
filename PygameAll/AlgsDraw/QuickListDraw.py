@@ -1,4 +1,4 @@
-from PygameAll.Algs.QuickSortStepContainer import QuickSortStepContainer
+from PygameAll.Algs.QuickSort.QuickSortStepContainer import QuickSortStepContainer
 from PygameAll.Elements.Text import Text
 from PygameAll.AlgsDraw.ListDraw import ListDraw
 import copy

@@ -183,8 +183,8 @@ class TestQuickSortDraw(TestCase):
         draw_list = []
 
         for unsorted in data_test:
-            draw = QuickSortStepContainer(copy.copy(unsorted))
-            draw.quick_sort(0, len(unsorted) - 1, unsorted)
+            draw = QuickSortStepContainer(unsorted)
+            draw.prepare_steps()
             draw_list.append(draw)
 
         for draw in draw_list:
