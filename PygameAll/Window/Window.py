@@ -11,13 +11,10 @@ class Window:
     width_button = 80
     height_button = 50
 
-    def __init__(self, width, height, fps, velocity):
-        self.width_for_scroll = 0
-        self.width = width + self.width_for_scroll
+    def __init__(self, width, height):
+        self.width = width
 
         self.height = height
-        self.fps = fps
-        self.velocity = velocity
 
         self.window = None
 
@@ -28,11 +25,12 @@ class Window:
         self.window.fill(self.BACKGROUND_COLOR)
 
     def redraw_window(self):
+        self.window.fill(self.BACKGROUND_COLOR)
         for x in self.elements:
             x.draw()
 
     def click(self):
         pass
 
-    def buttons_clicked_check(self, event):
+    def buttons_clicked_check(self, event, draw=None):
         pass

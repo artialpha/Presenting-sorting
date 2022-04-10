@@ -4,11 +4,13 @@ from PygameAll.Elements.DrawObject import DrawObject
 
 class ListDraw(DrawObject):
 
-    def __init__(self, lst, window, x, y):
+    def __init__(self, lst, window, x=None, y=None, width=None, height=None):
         super().__init__(x=x, y=y, window=window)
         self.lst = lst
         self.list_display = None
         self.step_counter = 0
+        self.width = width
+        self.height = height
 
         number_of_digits = int(math.log10(max(lst)))+1
         self.size_of_digit_x, self.size_of_digit_y = self.FONT.size(str(number_of_digits))
@@ -24,27 +26,37 @@ class ListDraw(DrawObject):
     def __getitem__(self, item):
         return self.list_display[item]
 
+    def __eq__(self, other):
+        return self.lst == other
+
     def draw(self):
-        self.window.fill(self.BACKGROUND_COLOR)
         for number, cords in self.list_display:
             number_display = self.FONT.render(str(number), True, self.TEXT_COLOR)
             self.window.blit(number_display, cords)
 
     def prepare_list_display(self):
         length_lst_half = (len(self.lst) / 2)
-        y = self.y / 4
+        if self.height:
+            y = self.height / 4
+        else:
+            y = self.y
 
         if length_lst_half.is_integer():
             length_lst_half = int(length_lst_half)
-            x = (self.x + self.padding) / 2
+            if self.width:
+                x = (self.width + self.padding) / 2
+            else:
+                x = self.x + self.padding/2
 
             list_cords = [[x + element*self.space_for_number, y] for element in
                           range(-length_lst_half, length_lst_half)]
         else:
             length_lst_half = int(length_lst_half)
-            x = (self.x - self.size_of_number) / 2
+            if self.width:
+                x = (self.width - self.size_of_number) / 2
+            else:
+                x = self.x - self.size_of_number/2
 
             list_cords = [[x + element*self.space_for_number, y] for element in
                           range(-length_lst_half, length_lst_half+1)]
         self.list_display = list((list(i) for i in zip(self.lst, list_cords)))
-

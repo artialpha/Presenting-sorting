@@ -1,18 +1,30 @@
 from PygameAll.Elements.TextArea import TextArea
 from PygameAll.Window.Window import Window
+from PygameAll.Window.WindowQuick import WindowQuick
+from PygameAll.Window.WindowMerge import WindowMerge
 
 
 class WindowMenu(Window):
 
-    def __init__(self, width, height, fps, velocity):
-        super().__init__(width, height, fps, velocity)
+    def __init__(self, width, height):
+        super().__init__(width, height)
 
         x = (self.width-self.width_button)/2
         y = self.height*(1/4)
         padding = 10
-        self.button_prev = TextArea(self.window, x, y, self.width_button, self.height_button, "quick")
-        self.button_next = TextArea(self.window, x, y + padding + self.height_button, self.width_button,
-                                    self.height_button, "merge")
-        self.elements.append(self.button_next)
-        self.elements.append(self.button_prev)
+        self.button_quick = TextArea(self.window, x, y, self.width_button, self.height_button, "quick")
+        self.button_merge = TextArea(self.window, x, y + padding + self.height_button, self.width_button,
+                                     self.height_button, "merge")
+        self.elements.append(self.button_merge)
+        self.elements.append(self.button_quick)
+
+    def buttons_clicked_check(self, event, draw=None):
+        lst = [3, 1, 9, 7, 8, 2, 6, 4, 5]
+        props = [item[1] for item in draw.__dict__.items()]
+        print(props)
+        if self.button_quick.rect.collidepoint(event.pos):
+            return WindowQuick(*props[:2], [3, 1, 9, 7, 8, 2, 6, 4, 5])
+        if self.button_merge.rect.collidepoint(event.pos):
+            print('merge')
+            return WindowMerge(*props[:2], [3, 1, 9, 7, 8, 2, 6, 4, 5])
 

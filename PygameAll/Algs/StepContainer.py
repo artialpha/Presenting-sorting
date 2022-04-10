@@ -4,7 +4,7 @@ import copy
 class StepContainer:
 
     def __init__(self, lst):
-        self.lst = copy.copy(lst)
+        self.lst = copy.deepcopy(lst)
         self.steps = []
 
     def __iadd__(self, other):

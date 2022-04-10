@@ -1,93 +1,109 @@
+import copy
+
 from PygameAll.Algs.StepContainer import StepContainer
-from MergeList import MergeList
+from PygameAll.Algs.MergeSort.MergeList import MergeList
 
 
 class MergeSortContainer(StepContainer):
 
+    class State:
+        def __init__(self, whole_list, index_list, index_a, index_b, replace_list):
+            self.whole_list = copy.deepcopy(whole_list)
+            self.index_list = index_list
+            self.index_a = index_a
+            self.index_b = index_b
+            self.replace_list = copy.deepcopy(replace_list)
+
+        def __str__(self):
+            str_return = f'whole list:    {self.whole_list}\n' \
+                         f'current list:  {self.whole_list[self.index_list]}\n' \
+                         f'index list:    {self.index_list}\n' \
+                         f'index a:       {self.index_a}\n' \
+                         f'index b:       {self.index_b}\n' \
+                         f'replace list:  {self.replace_list}\n\n'
+            return str_return
+
     # Step container copies the list so that i won't change the original
     def __init__(self, lst):
-        super().__init__(lst)
+        super().__init__(MergeList(lst))
 
-        self.stack_for_cutting = []
-        self.i = None
-        self.j = None
+        # indexes for a and b list in merge list, temp list is created of a and b
+        self.a_index = None
+        self.b_index = None
 
-        self.final_lst = []
+        self.states = []
+        self.index_of_current_list = None
+        self.replace_list = None
 
     def merge_sort(self, data):
         if len(data) == 1:
             return data
 
-        half = int(len(data)/2)
-        self.steps.append(
-            (
-                self.cut_in_half,
-                (data, [data[:half], data[half:]])
-            )
-        )
-        lst1 = self.merge_sort(data[:half])
-        lst2 = self.merge_sort(data[half:])
+        #print(self.lst, 'lst')
+        self.states.append(self.State(self.lst, self.index_of_current_list, self.a_index, self.b_index,
+                                      self.replace_list))
+        a, b = data.cut_in_half()
+        lst1 = self.merge_sort(a)
+        lst2 = self.merge_sort(b)
+        #print(self.lst, 'lst')
+        self.states.append(self.State(self.lst, self.index_of_current_list, self.a_index, self.b_index,
+                                      self.replace_list))
         return self.merge(lst1, lst2)
 
     def merge(self, lst1, lst2):
-        i = 0
-        j = 0
-        replace_lst = MergeList([])
+        self.a_index = 0
+        self.b_index = 0
+        self.replace_list = MergeList([])
+        self.index_of_current_list = lst1.out.index
+        last_visited = ''
 
-        self.steps.append((self.place_indexes, (lst1, lst2)))
-        while i < len(lst1) and j < len(lst2):
-            self.steps.append((self.compare_values, (lst1[i], lst2[j])))
-            if lst1[i] < lst2[j]:
-                self.steps.append((self.add_one_value, lst1[i]))
-                replace_lst.append(lst1[i])
+        self.states.append(self.State(self.lst, self.index_of_current_list, self.a_index, self.b_index,
+                                      self.replace_list))
 
-                if i+1 < len(lst1):
-                    self.steps.append((self.move_index, i))
-                i += 1
+        while True:
+            if lst1[self.a_index] < lst2[self.b_index]:
+                self.replace_list.append(lst1[self.a_index])
+                self.states.append(self.State(self.lst, self.index_of_current_list, self.a_index, self.b_index,
+                                              self.replace_list))
+                last_visited = 'a'
+                if (self.a_index + 1) == len(lst1):
+                    break
+
+                self.a_index += 1
+                self.states.append(self.State(self.lst, self.index_of_current_list, self.a_index, self.b_index,
+                                              self.replace_list))
             else:
-                self.steps.append((self.add_one_value, lst2[j]))
-                replace_lst.append(lst2[j])
+                self.replace_list.append(lst2[self.b_index])
+                self.states.append(self.State(self.lst, self.index_of_current_list, self.a_index, self.b_index,
+                                              self.replace_list))
+                last_visited = 'b'
+                if (self.b_index + 1) == len(lst2):
+                    break
 
-                if j+1 < len(lst2):
-                    self.steps.append((self.move_index, j))
-                j += 1
+                self.b_index += 1
+                self.states.append(self.State(self.lst, self.index_of_current_list, self.a_index, self.b_index,
+                                              self.replace_list))
 
-        if i == len(lst1):
-            replace_lst.extend(lst2[j:])
-            self.steps.append((self.add_rest, lst2[j:]))
-            self.steps.append((self.add_to_final_list, replace_lst))
+        if last_visited == 'a':
+            self.replace_list.extend(lst2[self.b_index:])
+            self.states.append(self.State(self.lst, self.index_of_current_list, self.a_index, self.b_index,
+                                          self.replace_list))
         else:
-            replace_lst.extend(lst1[i:])
-            self.steps.append((self.add_rest, lst1[i:]))
-            self.steps.append((self.add_to_final_list, replace_lst))
-        # [:]
-        return replace_lst
+            self.replace_list.extend(lst1[self.a_index:])
+            self.states.append(self.State(self.lst, self.index_of_current_list, self.a_index, self.b_index,
+                                          self.replace_list))
+
+        lst1.out[:] = self.replace_list
+        return lst1.out
 
     def cut_in_half(self):
-        half = int(len(self.lst)/2)
-        a = self.lst[:half]
-        b = self.lst[half:]
-        self.lst[:] = [a, b]
+        #print('from', self.lst)
+        self.lst.cut_in_half()
+        #print('to', self.lst)
 
-    def place_indexes(self):
-        pass
+    def show_states(self):
+        for counter, state in enumerate(self.states):
+            to_print = f'counter: {counter}\n{str(state):<85}'
+            print(to_print)
 
-    def compare_values(self):
-        pass
 
-    def add_one_value(self):
-        pass
-
-    def move_index(self):
-        pass
-
-    def add_rest(self):
-        pass
-
-    def add_to_final_list(self, replace_lst):
-        self.final_lst = [lst for lst in self.final_lst if not len(set(lst) & set(replace_lst)) > 0]
-        self.final_lst.append(replace_lst)
-
-    def show_steps(self):
-        for counter, step in enumerate(self.steps):
-            print(step, counter)

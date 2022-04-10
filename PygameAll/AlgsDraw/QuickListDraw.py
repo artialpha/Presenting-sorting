@@ -5,8 +5,8 @@ import copy
 
 
 class QuickListDraw(ListDraw):
-    def __init__(self, lst, window, x, y):
-        super().__init__(lst=lst, x=x, y=y, window=window)
+    def __init__(self, lst, window, x=None, y=None, width=None, height=None):
+        super().__init__(lst=lst, x=x, y=y, window=window, width=width, height=height)
 
         self.quick_sort_data = QuickSortStepContainer(copy.copy(lst))
         self.quick_sort_data.prepare_steps()
