@@ -29,8 +29,7 @@ class WindowMerge(Window):
             self.list_draw.state_display()
         if self.button_prev.rect.collidepoint(event.pos):
             print('prev megre')
-            self.list_draw.state_counter -= 1
-            self.list_draw.state_display()
+            self.list_draw.reverse_state()
 
 
 

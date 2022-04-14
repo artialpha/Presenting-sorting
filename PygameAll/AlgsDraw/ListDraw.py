@@ -1,16 +1,19 @@
 import math
+
+from PygameAll.Algs.MergeSort.MergeList import MergeList
 from PygameAll.Elements.DrawObject import DrawObject
 
 
 class ListDraw(DrawObject):
 
-    def __init__(self, lst, window, x=None, y=None, width=None, height=None):
+    def __init__(self, lst, window, x=None, y=None, width=None, height=None, index=None):
         super().__init__(x=x, y=y, window=window)
         self.lst = lst
         self.list_display = None
         self.step_counter = 0
         self.width = width
         self.height = height
+        self.index = index
 
         number_of_digits = int(math.log10(max(lst)))+1
         self.size_of_digit_x, self.size_of_digit_y = self.FONT.size(str(number_of_digits))
@@ -21,13 +24,26 @@ class ListDraw(DrawObject):
         self.space_for_number = self.size_of_number + self.padding
         # print(self.space_for_number, 'self.space_for_number')
         self.prepare_list_display()
-        print(self.list_display)
 
     def __getitem__(self, item):
         return self.list_display[item]
 
     def __eq__(self, other):
-        return self.lst == other
+        if isinstance(other, ListDraw):
+            return self.list_display == other.list_display
+        elif isinstance(other, tuple):
+            return (self.x, self.y) == other
+        elif isinstance(other, str):
+            return self.index == other
+        elif isinstance(other, MergeList):
+            print(self.lst)
+            return self.lst == other
+
+    def __str__(self):
+        return str(self.list_display)
+
+    def __repr__(self):
+        return str(self.list_display)
 
     def draw(self):
         for number, cords in self.list_display:

@@ -17,7 +17,7 @@ def main():
 
     run = True
     width = 600
-    height = 400
+    height = 600
 
 
     # list of random numbers

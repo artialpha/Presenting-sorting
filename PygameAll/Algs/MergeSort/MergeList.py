@@ -8,9 +8,10 @@ class MergeList:
         self.a = None
         self.b = None
         self.out = None
+        self.original_list = copy.deepcopy(lst)
 
         # index - how to get to this list if it is deeply nested
-        self.index = ''
+        self.index = '0'
         self.representation = None
 
     def __str__(self):
@@ -62,6 +63,8 @@ class MergeList:
             half = int(len(self.lst)/2)
             self.a = self[:half]
             self.b = self[half:]
+
+            self.a.index, self.b.index = '', ''
 
             self.a.index += self.index + '0'
             self.b.index += self.index + '1'
