@@ -11,7 +11,7 @@ from PygameAll.Elements.DrawObject import DrawObject
 
 class MergeListDraw(MergeList, DrawObject):
     x, y = 300, 25
-    cords_replace = (300, 350)
+    cords_replace = (300, 300)
     letter_move_y = 30
 
     def __init__(self, lst, window, x, y):

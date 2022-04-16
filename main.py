@@ -24,7 +24,7 @@ def main():
     # lst = random.sample(range(10, 100), 9)
     lst = [3, 1, 9, 7, 8, 2, 6, 4, 5]
 
-    draw = WindowMerge(width, height, lst)
+    draw = WindowQuick(width, height, lst)
     while run:
         draw.redraw_window()
         pygame.display.update()

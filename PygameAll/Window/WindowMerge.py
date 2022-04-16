@@ -22,14 +22,26 @@ class WindowMerge(Window):
         self.elements.append(self.button_next)
         self.elements.append(self.button_prev)
 
+        x = self.width/2
+        y = self.height*(3/4)-50
+        padding = 10
+        self.max_steps = Text(self.window, x + padding, y, str(len(self.list_draw.merge_sort_data.states) - 1))
+        max_steps_width = self.max_steps.text.get_size()[0]
+        self.current_number = Text(self.window, x - max_steps_width - padding, y, '0')
+
+        self.elements.append(self.current_number)
+        self.elements.append(self.max_steps)
+
     def buttons_clicked_check(self, event, draw=None):
         if self.button_next.rect.collidepoint(event.pos):
-            print('next merge')
-            self.list_draw.state_counter += 1
-            self.list_draw.state_display()
-        if self.button_prev.rect.collidepoint(event.pos):
+            if self.list_draw.state_counter < len(self.list_draw.merge_sort_data.states) - 1:
+                print('next merge')
+                self.list_draw.state_counter += 1
+                self.list_draw.state_display()
+        if self.button_prev.rect.collidepoint(event.pos) and self.list_draw.state_counter > 0:
             print('prev megre')
             self.list_draw.reverse_state()
+        self.current_number.text = self.list_draw.state_counter
 
 
 
