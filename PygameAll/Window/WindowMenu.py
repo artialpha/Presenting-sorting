@@ -1,4 +1,5 @@
 from PygameAll.Elements.TextArea import TextArea
+from PygameAll.Elements.TextInput import TextInput
 from PygameAll.Window.Window import Window
 from PygameAll.Window.WindowQuick import WindowQuick
 from PygameAll.Window.WindowMerge import WindowMerge
@@ -18,13 +19,27 @@ class WindowMenu(Window):
         self.elements.append(self.button_merge)
         self.elements.append(self.button_quick)
 
+        text_input_width = 300
+        self.text_input = TextInput(self.window, (self.width-text_input_width)/2, self.height/10, text_input_width,
+                                   50, bg_color=(255,)*3)
+        self.elements.append(self.text_input)
+
     def buttons_clicked_check(self, event, draw=None):
         lst = [3, 1, 9, 7, 8, 2, 6, 4, 5]
         props = [item[1] for item in draw.__dict__.items()]
-        print(props)
+
         if self.button_quick.rect.collidepoint(event.pos):
             return WindowQuick(*props[:2], [3, 1, 9, 7, 8, 2, 6, 4, 5])
-        if self.button_merge.rect.collidepoint(event.pos):
+        elif self.button_merge.rect.collidepoint(event.pos):
             print('merge')
             return WindowMerge(*props[:2], [3, 1, 9, 7, 8, 2, 6, 4, 5])
+        elif self.text_input.rect.collidepoint(event.pos):
+            print(self.text_input.rect, event.pos, 'text input rect')
+            self.text_input.active = True
+        else:
+            self.text_input.active = False
+
+    def type_text(self, event):
+        if self.text_input.active:
+            self.text_input.update(event)
 

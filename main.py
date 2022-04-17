@@ -1,5 +1,7 @@
 import pygame
 import time
+
+
 from PygameAll.Window.WindowQuick import WindowQuick
 from PygameAll.Window.WindowMerge import WindowMerge
 from PygameAll.Window.WindowMenu import WindowMenu
@@ -23,21 +25,12 @@ def main():
     # list of random numbers
     # lst = random.sample(range(10, 100), 9)
     lst = [3, 1, 9, 7, 8, 2, 6, 4, 5]
+    draw = WindowMenu(width, height)
 
-    draw = WindowQuick(width, height, lst)
     while run:
         draw.redraw_window()
         pygame.display.update()
-        keys = pygame.key.get_pressed()
-        pos = pygame.mouse.get_pos()
-
-        # Limit framrate
-        # if fps=50 then for every second at most 50 frames should pass
         clock.tick(fps)
-        # compute delta time
-        now = time.time()
-        dt = now - prev_time
-        prev_time = now
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -46,9 +39,13 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     if isinstance(draw, WindowMenu):
-                        draw = draw.buttons_clicked_check(event, draw)
+                        print('click on button')
+                        if res := draw.buttons_clicked_check(event, draw):
+                            draw = res
                     else:
                         draw.buttons_clicked_check(event)
+            elif event.type == pygame.KEYDOWN:
+                draw.type_text(event)
 
 
 if __name__ == "__main__":
